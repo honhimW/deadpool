@@ -13,6 +13,7 @@ use tokio::sync::Mutex;
 use deadpool::managed;
 pub use deadpool::managed::reexports::*;
 
+use crate::log_cmd;
 pub use crate::sentinel::config::SentinelServerType;
 
 pub use self::config::{Config, ConfigError};
@@ -85,6 +86,8 @@ impl ConnectionLike for Connection {
         &'a mut self,
         cmd: &'a redis::Cmd,
     ) -> redis::RedisFuture<'a, redis::Value> {
+        #[cfg(feature = "log")]
+        log_cmd(cmd);
         self.conn.req_packed_command(cmd)
     }
 
