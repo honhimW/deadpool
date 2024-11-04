@@ -107,6 +107,8 @@ impl ConnectionLike for Connection {
         &'a mut self,
         cmd: &'a redis::Cmd,
     ) -> redis::RedisFuture<'a, redis::Value> {
+        #[cfg(feature = "log")]
+        log_cmd(cmd);
         self.conn.req_packed_command(cmd)
     }
 
@@ -172,4 +174,23 @@ impl managed::Manager for Manager {
             Err(managed::RecycleError::message("Invalid PING response"))
         }
     }
+}
+
+/// Pretty format human readable redis command.
+fn format_cmd(cmd: &Cmd) -> String {
+    let mut s = String::new();
+    for x in cmd.args_iter() {
+        match x {
+            Arg::Simple(a) => {
+                s.push_str(&format!("\"{}\"", String::from_utf8_lossy(a)));
+                s.push_str(" ");
+            }
+            Arg::Cursor => {}
+        }
+    }
+    s
+}
+
+pub(crate) fn log_cmd(cmd: &Cmd) {
+    info!(target: "cmd", ">> {}", format_cmd(cmd));
 }

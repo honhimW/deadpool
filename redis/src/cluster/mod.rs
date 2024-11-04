@@ -15,6 +15,7 @@ pub use redis::cluster_async::ClusterConnection;
 
 pub use self::config::{Config, ConfigError};
 
+use crate::log_cmd;
 pub use deadpool::managed::reexports::*;
 deadpool::managed_reexports!(
     "redis_cluster",
@@ -91,6 +92,8 @@ impl ConnectionLike for Connection {
         offset: usize,
         count: usize,
     ) -> redis::RedisFuture<'a, Vec<redis::Value>> {
+        #[cfg(feature = "log")]
+        log_cmd(cmd);
         self.conn.req_packed_commands(cmd, offset, count)
     }
 
