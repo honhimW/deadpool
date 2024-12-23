@@ -48,6 +48,7 @@ tcp_nodelay = ["redis/tcp_nodelay"]
 num-bigint = ["redis/num-bigint"]
 disable-client-setinfo = ["redis/disable-client-setinfo"]
 cache-aio = ["redis/cache-aio"]
+log = ["dep:log"]
 
 [dependencies]
 deadpool = { path = "../", version = "0.12.0", default-features = false, features = [
@@ -58,6 +59,7 @@ serde = { package = "serde", version = "1.0", features = [
     "derive",
 ], optional = true }
 tokio = { version = "1.0", default-features = false, optional = true }
+log = { version = "0.4", optional = true }
 
 [dev-dependencies]
 config = { version = "0.15", features = ["json"] }

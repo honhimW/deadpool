@@ -36,7 +36,7 @@ use std::{
 use deadpool::managed;
 use redis::{
     aio::{ConnectionLike, MultiplexedConnection},
-    Client, IntoConnectionInfo, RedisError, RedisResult,
+    Arg, Client, Cmd, IntoConnectionInfo, RedisError, RedisResult,
 };
 
 pub use redis;
@@ -46,6 +46,9 @@ pub use self::config::{
 };
 
 pub use deadpool::managed::reexports::*;
+#[cfg(feature = "log")]
+use log::info;
+
 deadpool::managed_reexports!("redis", Manager, Connection, RedisError, ConfigError);
 
 /// Type alias for using [`deadpool::managed::RecycleResult`] with [`redis`].
@@ -172,4 +175,24 @@ impl managed::Manager for Manager {
             Err(managed::RecycleError::message("Invalid PING response"))
         }
     }
+}
+
+/// Pretty format human readable redis command.
+fn format_cmd(cmd: &Cmd) -> String {
+    let mut s = String::new();
+    for x in cmd.args_iter() {
+        match x {
+            Arg::Simple(a) => {
+                s.push_str(&format!("\"{}\"", String::from_utf8_lossy(a)));
+                s.push_str(" ");
+            }
+            Arg::Cursor => {}
+        }
+    }
+    s
+}
+
+pub(crate) fn log_cmd(cmd: &Cmd) {
+    #[cfg(feature = "log")]
+    info!(target: "cmd", ">> {}", format_cmd(cmd));
 }
