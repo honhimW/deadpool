@@ -107,6 +107,8 @@ impl ConnectionLike for Connection {
         &'a mut self,
         cmd: &'a redis::Cmd,
     ) -> redis::RedisFuture<'a, redis::Value> {
+        #[cfg(feature = "log")]
+        log_cmd(cmd);
         self.conn.req_packed_command(cmd)
     }
 
