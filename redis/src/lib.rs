@@ -128,7 +128,7 @@ impl ConnectionLike for Connection {
 ///
 /// [`Manager`]: managed::Manager
 pub struct Manager {
-    client: Client,
+    pub client: Client,
     ping_number: AtomicUsize,
     connection_config: AsyncConnectionConfig,
 }
