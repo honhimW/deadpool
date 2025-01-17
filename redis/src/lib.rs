@@ -188,7 +188,9 @@ fn format_cmd(cmd: &Cmd) -> String {
                 s.push_str(&format!("\"{}\"", String::from_utf8_lossy(a)));
                 s.push_str(" ");
             }
-            Arg::Cursor => {}
+            Arg::Cursor => {
+                s.push_str("0 ");
+            }
         }
     }
     s
