@@ -212,7 +212,7 @@ fn format_cmd(cmd: &Cmd) -> String {
                 s.push_str(" ");
             }
             Arg::Cursor => {
-                s.push_str("0 ");
+                s.push_str("\"0\" ");
             }
         }
     }
