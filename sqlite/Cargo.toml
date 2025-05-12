@@ -29,7 +29,9 @@ buildtime_bindgen = ["rusqlite/buildtime_bindgen"]
 bundled = ["rusqlite/bundled"]
 bundled-full = ["rusqlite/bundled-full"]
 bundled-sqlcipher = ["rusqlite/bundled-sqlcipher"]
-bundled-sqlcipher-vendored-openssl = ["rusqlite/bundled-sqlcipher-vendored-openssl"]
+bundled-sqlcipher-vendored-openssl = [
+    "rusqlite/bundled-sqlcipher-vendored-openssl",
+]
 bundled-windows = ["rusqlite/bundled-windows"]
 collation = ["rusqlite/collation"]
 column_decltype = ["rusqlite/column_decltype"]
@@ -61,7 +63,7 @@ deadpool = { path = "../", version = "0.12.0", default-features = false, feature
     "managed",
 ] }
 deadpool-sync = { path = "../sync", version = "0.1.1" }
-rusqlite = "0.33.0"
+rusqlite = "0.35.0"
 serde = { package = "serde", version = "1.0", features = [
     "derive",
 ], optional = true }
