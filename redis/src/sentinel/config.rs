@@ -1,6 +1,5 @@
 pub use crate::config::ConfigError;
 use crate::{ConnectionAddr, ConnectionInfo, RedisConnectionInfo};
-use serde::{Deserialize, Serialize};
 
 use super::{CreatePoolError, Pool, PoolBuilder, PoolConfig, Runtime};
 
@@ -48,10 +47,10 @@ pub struct Config {
     /// ServerType
     ///
     /// [`SentinelServerType`]
-    #[serde(default)]
+    #[cfg_attr(feature = "serde", serde(default))]
     pub server_type: SentinelServerType,
     /// Sentinel setup master name. default value is `mymaster`
-    #[serde(default = "default_master_name")]
+    #[cfg_attr(feature = "serde", serde(default = "default_master_name"))]
     pub master_name: String,
     /// [`redis::ConnectionInfo`] structures.
     pub connections: Option<Vec<ConnectionInfo>>,
@@ -223,7 +222,7 @@ impl From<TlsMode> for redis::TlsMode {
 
 /// This type is a wrapper for [`redis::sentinel::SentinelNodeConnectionInfo`] for serialize/deserialize/debug.
 #[derive(Clone, Debug, Default)]
-#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(crate = "serde"))]
 pub struct SentinelNodeConnectionInfo {
     /// The TLS mode of the connection, or None if we do not want to connect using TLS
