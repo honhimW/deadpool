@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.1] - 2025-05-20
+
+- Fix `sentinel` feature when `serde` feature is not enabled
+
 ## [0.21.0] - 2025-05-19
 
 - Update `redis` dependency to version `0.31`
@@ -192,7 +196,8 @@ Release of 0.6 and 0.7 with the following feature backported:
 - First release
 
 <!-- next-url -->
-[Unreleased]: https://github.com/bikeshedder/deadpool/compare/deadpool-redis-v0.21.0...HEAD
+[Unreleased]: https://github.com/bikeshedder/deadpool/compare/deadpool-redis-v0.21.1...HEAD
+[0.21.1]: https://github.com/bikeshedder/deadpool/compare/deadpool-redis-v0.21.0...deadpool-redis-v0.21.1
 [0.21.0]: https://github.com/bikeshedder/deadpool/compare/deadpool-redis-v0.20.0...deadpool-redis-v0.21.0
 [0.20.0]: https://github.com/bikeshedder/deadpool/compare/deadpool-redis-v0.19.0...deadpool-redis-v0.20.0
 [0.19.0]: https://github.com/bikeshedder/deadpool/compare/deadpool-redis-v0.18.0...deadpool-redis-v0.19.0
