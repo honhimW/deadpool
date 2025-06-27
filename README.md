@@ -59,11 +59,11 @@ struct Manager {}
 impl managed::Manager for Manager {
     type Type = Computer;
     type Error = Error;
-    
+
     async fn create(&self) -> Result<Computer, Error> {
         Ok(Computer {})
     }
-    
+
     async fn recycle(&self, _: &mut Computer, _: &managed::Metrics) -> managed::RecycleResult<Error> {
         Ok(())
     }
@@ -87,20 +87,22 @@ Deadpool supports various database backends by implementing the
 `deadpool::managed::Manager` trait. The following backends are
 currently supported:
 
-Backend | Crate | Latest Version |
-------- | ----- | -------------- |
-[bolt-client](https://crates.io/crates/bolt-client) | [deadpool-bolt](https://crates.io/crates/deadpool-bolt) | [![Latest Version](https://img.shields.io/crates/v/deadpool-bolt.svg)](https://crates.io/crates/deadpool-bolt) |
-[tokio-postgres](https://crates.io/crates/tokio-postgres) | [deadpool-postgres](https://crates.io/crates/deadpool-postgres) | [![Latest Version](https://img.shields.io/crates/v/deadpool-postgres.svg)](https://crates.io/crates/deadpool-postgres) |
-[lapin](https://crates.io/crates/lapin) (AMQP) | [deadpool-lapin](https://crates.io/crates/deadpool-lapin) | [![Latest Version](https://img.shields.io/crates/v/deadpool-lapin.svg)](https://crates.io/crates/deadpool-lapin) |
-[redis](https://crates.io/crates/redis) | [deadpool-redis](https://crates.io/crates/deadpool-redis) | [![Latest Version](https://img.shields.io/crates/v/deadpool-redis.svg)](https://crates.io/crates/deadpool-redis) |
-[async-memcached](https://crates.io/crates/async-memcached) | [deadpool-memcached](https://crates.io/crates/deadpool-memcached) | [![Latest Version](https://img.shields.io/crates/v/deadpool-memcached.svg)](https://crates.io/crates/deadpool-memcached) |
-[rusqlite](https://crates.io/crates/rusqlite) | [deadpool-sqlite](https://crates.io/crates/deadpool-sqlite) | [![Latest Version](https://img.shields.io/crates/v/deadpool-sqlite.svg)](https://crates.io/crates/deadpool-sqlite) |
-[diesel](https://crates.io/crates/diesel) | [deadpool-diesel](https://crates.io/crates/deadpool-diesel) | [![Latest Version](https://img.shields.io/crates/v/deadpool-diesel.svg)](https://crates.io/crates/deadpool-diesel) |
-[tiberius](https://crates.io/crates/tiberius) | [deadpool-tiberius](https://crates.io/crates/deadpool-tiberius) | [![Latest Version](https://img.shields.io/crates/v/deadpool-tiberius.svg)](https://crates.io/crates/deadpool-tiberius) |
-[r2d2](https://crates.io/crates/r2d2) | [deadpool-r2d2](https://crates.io/crates/deadpool-r2d2) | [![Latest Version](https://img.shields.io/crates/v/deadpool-r2d2.svg)](https://crates.io/crates/deadpool-r2d2) |
-[rbatis](https://crates.io/crates/rbatis) | [rbatis](https://crates.io/crates/rbatis) | [![Latest Version](https://img.shields.io/crates/v/rbatis.svg)](https://crates.io/crates/rbatis) |
-[ldap3](https://crates.io/crates/ldap3) | [deadpool-ldap3](https://crates.io/crates/deadpool-ldap3) | [![Latest Version](https://img.shields.io/crates/v/deadpool-ldap3.svg)](https://crates.io/crates/deadpool-ldap3) |
-[clickhouse](https://crates.io/crates/clickhouse) | [clickhouse-pool](https://crates.io/crates/clickhouse-pool) | [![Latest Version](https://img.shields.io/crates/v/clickhouse-pool.svg)](https://crates.io/crates/clickhouse-pool) |
+Database (Protocol) | Backend | Crate | Latest Version | Official [deadpool-rs](https://github.com/deadpool-rs/) crate¹ |
+------------------- | ------- | ----- | -------------- | ------------------------------------------------------------- |
+[PostgreSQL](https://www.postgresql.org/) | [tokio-postgres](https://crates.io/crates/tokio-postgres) | [deadpool-postgres](https://crates.io/crates/deadpool-postgres) | [![Latest Version](https://img.shields.io/crates/v/deadpool-postgres.svg)](https://crates.io/crates/deadpool-postgres) | ✔ |
+[Valkey](https://valkey.io/), [Redis](https://redis.io/) | [redis](https://crates.io/crates/redis) | [deadpool-redis](https://crates.io/crates/deadpool-redis) | [![Latest Version](https://img.shields.io/crates/v/deadpool-redis.svg)](https://crates.io/crates/deadpool-redis) | ✔ |
+[SQLite](https://sqlite.org) | [rusqlite](https://crates.io/crates/rusqlite) | [deadpool-sqlite](https://crates.io/crates/deadpool-sqlite) | [![Latest Version](https://img.shields.io/crates/v/deadpool-sqlite.svg)](https://crates.io/crates/deadpool-sqlite) | ✔ |
+[RabbitMQ](https://www.rabbitmq.com/) ([AMQP](https://www.amqp.org/)) | [lapin](https://crates.io/crates/lapin) | [deadpool-lapin](https://crates.io/crates/deadpool-lapin) | [![Latest Version](https://img.shields.io/crates/v/deadpool-lapin.svg)](https://crates.io/crates/deadpool-lapin) | ✔ |
+[Memcached](https://www.memcached.org/) | [async-memcached](https://crates.io/crates/async-memcached) | [deadpool-memcached](https://crates.io/crates/deadpool-memcached) | [![Latest Version](https://img.shields.io/crates/v/deadpool-memcached.svg)](https://crates.io/crates/deadpool-memcached) | ✔ |
+— | [diesel](https://crates.io/crates/diesel) | [deadpool-diesel](https://crates.io/crates/deadpool-diesel) | [![Latest Version](https://img.shields.io/crates/v/deadpool-diesel.svg)](https://crates.io/crates/deadpool-diesel) | ✔ |
+— | [r2d2](https://crates.io/crates/r2d2) | [deadpool-r2d2](https://crates.io/crates/deadpool-r2d2) | [![Latest Version](https://img.shields.io/crates/v/deadpool-r2d2.svg)](https://crates.io/crates/deadpool-r2d2) | ✔ |
+[MySQL](https://www.mysql.com/) | [tiberius](https://crates.io/crates/tiberius) | [deadpool-tiberius](https://crates.io/crates/deadpool-tiberius) | [![Latest Version](https://img.shields.io/crates/v/deadpool-tiberius.svg)](https://crates.io/crates/deadpool-tiberius) | |
+[neo4j](https://neo4j.com/) ([Bolt](https://neo4j.com/docs/bolt/)) | [bolt-client](https://crates.io/crates/bolt-client) | [deadpool-bolt](https://crates.io/crates/deadpool-bolt) | [![Latest Version](https://img.shields.io/crates/v/deadpool-bolt.svg)](https://crates.io/crates/deadpool-bolt) |  |
+[rbatis](https://rbatis.github.io/rbatis.io/) | [rbatis](https://crates.io/crates/rbatis) | [rbatis](https://crates.io/crates/rbatis) | [![Latest Version](https://img.shields.io/crates/v/rbatis.svg)](https://crates.io/crates/rbatis) | |
+[LDAP v3](https://www.rfc-editor.org/rfc/rfc4511.txt) | [ldap3](https://crates.io/crates/ldap3) | [deadpool-ldap3](https://crates.io/crates/deadpool-ldap3) | [![Latest Version](https://img.shields.io/crates/v/deadpool-ldap3.svg)](https://crates.io/crates/deadpool-ldap3) | |
+[ClickHouse](https://clickhouse.com/) | [clickhouse](https://crates.io/crates/clickhouse) | [clickhouse-connection-pool](https://crates.io/crates/clickhouse-connection-pool) | [![Latest Version](https://img.shields.io/crates/v/clickhouse-connection-pool.svg)](https://crates.io/crates/clickhouse-connection-pool) | |
+
+¹ "Official deadpool-rs crates" marks crates maintained by the [deadpool-rs](https://github.com/deadpool-rs/) project. This shows ownership only, not quality or support level. Third-party crates are welcome to join the deadpool-rs umbrella for centralized maintenance and collaboration.  
 
 ### Reasons for yet another connection pool
 
