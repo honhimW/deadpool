@@ -1,4 +1,4 @@
-#![cfg(feature = "serde")]
+#![cfg(all(feature = "cluster", feature = "serde"))]
 
 use deadpool_redis::cluster::Runtime;
 use futures::FutureExt;

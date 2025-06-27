@@ -1,4 +1,4 @@
-#![cfg(feature = "serde")]
+#![cfg(all(feature = "sentinel", feature = "serde"))]
 
 use futures::FutureExt;
 use redis::cmd;
