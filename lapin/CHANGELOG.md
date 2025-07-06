@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Re-export `lapin` features
+- Update `lapin` dependency to version `3`
 
 ## [0.12.1] - 2024-05-04
 
