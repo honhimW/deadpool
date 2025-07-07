@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Update `redis` dependency to version `0.32`
+
 ## [0.21.1] - 2025-05-20
 
 - Fix `sentinel` feature when `serde` feature is not enabled
