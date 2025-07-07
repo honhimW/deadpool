@@ -87,11 +87,13 @@ impl Config {
         let conn_props = match runtime {
             None => conn_props,
             #[cfg(feature = "rt_tokio_1")]
-            Some(Runtime::Tokio1) => {
-                conn_props.with_executor(tokio_executor_trait::Tokio::current())
-            }
+            Some(Runtime::Tokio1) => conn_props
+                .with_executor(tokio_executor_trait::Tokio::current())
+                .with_reactor(tokio_reactor_trait::Tokio),
             #[cfg(feature = "rt_async-std_1")]
-            Some(Runtime::AsyncStd1) => conn_props.with_executor(async_executor_trait::AsyncStd),
+            Some(Runtime::AsyncStd1) => conn_props
+                .with_executor(async_executor_trait::AsyncStd)
+                .with_reactor(async_reactor_trait::AsyncIo),
             #[allow(unreachable_patterns)]
             _ => unreachable!(),
         };
