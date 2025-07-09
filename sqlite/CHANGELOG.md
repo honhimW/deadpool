@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fix `docs.rs` documentation compilation
+
 ## [0.12.0] - 2025-07-08
 
 - Update `rusqlite` dependency to version `0.37`

@@ -11,7 +11,8 @@ repository = "https://github.com/bikeshedder/deadpool"
 readme = "README.md"
 
 [package.metadata.docs.rs]
-all-features = true
+all-features = false
+features = ["serde"]
 rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
