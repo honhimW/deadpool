@@ -174,6 +174,14 @@ pub(crate) struct ObjectInner<M: Manager> {
     /// Actual pooled object.
     obj: M::Type,
 
+    /// The id of this object. This number is strictly monotonically
+    /// increasing. The order of IDs is equal to the time the objects
+    /// was created.
+    ///
+    /// This can be used to discard objects after a configuration change
+    /// or simply identify an objects for debugging purposes.
+    id: usize,
+
     /// Object metrics.
     metrics: Metrics,
 }
@@ -188,6 +196,15 @@ impl<M: Manager> Object<M> {
             pool.inner.detach_object(&mut inner)
         }
         inner
+    }
+
+    /// Returns the unique ID of this object.
+    ///
+    /// Object IDs are strictly monotonically increasing — each new object
+    /// receives an ID greater than that of the previously created object.
+    /// However, IDs are not guaranteed to be consecutive; gaps may exist.
+    pub fn id(this: &Self) -> usize {
+        this.inner.as_ref().unwrap().id
     }
 
     /// Get object statistics
@@ -287,6 +304,7 @@ impl<M: Manager, W: From<Object<M>>> Pool<M, W> {
         Self {
             inner: Arc::new(PoolInner {
                 manager: builder.manager,
+                next_id: AtomicUsize::new(0),
                 slots: Mutex::new(Slots {
                     vec: VecDeque::with_capacity(builder.config.max_size),
                     size: 0,
@@ -434,6 +452,7 @@ impl<M: Manager, W: From<Object<M>>> Pool<M, W> {
                     self.inner.manager.create(),
                 )
                 .await?,
+                id: self.inner.next_id.fetch_add(1, Ordering::Relaxed),
                 metrics: Metrics::default(),
             }),
             pool: &self.inner,
@@ -593,6 +612,7 @@ impl<M: Manager, W: From<Object<M>>> Pool<M, W> {
 
 struct PoolInner<M: Manager> {
     manager: M,
+    next_id: AtomicUsize,
     slots: Mutex<Slots<ObjectInner<M>>>,
     /// Number of ['Pool'] users. A user is both a future which is waiting for an ['Object'] or one
     /// with an ['Object'] which hasn't been returned, yet.
