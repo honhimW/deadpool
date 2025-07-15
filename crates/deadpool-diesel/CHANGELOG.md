@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump up MSRV to `1.84`
 - Re-export `diesel` features
 - Mimick `default` features of `diesel` crate
+- Remove `RecyclingMethod::Fast` which does not detect broken connections
 
 ## [0.6.1] - 2024-05-04
 

@@ -28,16 +28,10 @@ pub type RecycleCheckCallback<C> = dyn Fn(&mut C) -> Result<(), Error> + Send + 
 #[derive(Default)]
 /// Possible methods of how a connection is recycled.
 pub enum RecyclingMethod<C> {
-    /// Only check for open transactions when recycling existing connections
-    /// Unless you have special needs this is a safe choice.
-    ///
-    /// If the database connection is closed you will recieve an error on the first place
-    /// you actually try to use the connection
+    /// Check for open transactions when recycling existing connections and
+    /// run a test query. This ensure that the database connection is still
+    /// ready to be used.
     #[default]
-    Fast,
-    /// In addition to checking for open transactions a test query is executed
-    ///
-    /// This is slower, but guarantees that the database connection is ready to be used.
     Verified,
     /// Like `Verified` but with a custom query
     CustomQuery(Cow<'static, str>),
@@ -70,7 +64,6 @@ impl<C> Default for ManagerConfig<C> {
 impl<C: fmt::Debug> fmt::Debug for RecyclingMethod<C> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Fast => write!(f, "Fast"),
             Self::Verified => write!(f, "Verified"),
             Self::CustomQuery(arg0) => f.debug_tuple("CustomQuery").field(arg0).finish(),
             Self::CustomFunction(_) => f.debug_tuple("CustomFunction").finish(),
@@ -170,8 +163,6 @@ where
             return Err(Error::BrokenTransactionManger);
         }
         match self {
-            // For fast we are basically done
-            RecyclingMethod::Fast => {}
             // For verified we perform a `SELECT 1` statement
             // We use the DSL here to make this somewhat independent from
             // the backend SQL dialect
