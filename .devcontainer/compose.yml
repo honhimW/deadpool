@@ -34,7 +34,6 @@ services:
   postgres:
     # https://hub.docker.com/_/postgres
     image: postgres:17-alpine
-    restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
     env_file:
@@ -43,14 +42,12 @@ services:
   redis:
     # https://hub.docker.com/_/redis/tags
     image: redis:7.4-alpine
-    restart: unless-stopped
     volumes:
       - redis-data:/data
 
   redis-cluster:
     # https://hub.docker.com/r/grokzen/redis-cluster
     image: grokzen/redis-cluster:7.0.15
-    restart: unless-stopped
     volumes:
       - redis-cluster-data:/redis-data
 
