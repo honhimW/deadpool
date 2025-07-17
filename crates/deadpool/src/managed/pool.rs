@@ -7,7 +7,7 @@ use std::{
     marker::PhantomData,
     sync::{
         atomic::{AtomicUsize, Ordering},
-        Arc, Mutex,
+        Arc, Mutex, Weak,
     },
     time::Duration,
 };
@@ -152,7 +152,7 @@ impl<M: Manager, W: From<Object<M>>> Pool<M, W> {
 
         Ok(Object {
             inner: Some(inner_obj),
-            pool: Arc::downgrade(&self.inner),
+            pool: self.weak(),
         }
         .into())
     }
@@ -371,6 +371,44 @@ impl<M: Manager, W: From<Object<M>>> Pool<M, W> {
     #[must_use]
     pub fn manager(&self) -> &M {
         &self.inner.manager
+    }
+
+    /// Returns a [`WeakPool<T>`] of this [`Pool`].
+    pub fn weak(&self) -> WeakPool<M> {
+        WeakPool {
+            inner: Arc::downgrade(&self.inner),
+            _wrapper: PhantomData,
+        }
+    }
+}
+
+/// A weak reference to a [`Pool<T>`], used to avoid keeping the pool alive.
+///
+/// `WeakPool<T>` is analogous to [`std::sync::Weak<T>`] for [`Pool<T>`], and
+/// is typically used in situations where you need a non-owning reference to a pool,
+/// such as in background tasks, managers, or callbacks that should not extend
+/// the lifetime of the pool.
+///
+/// This allows components to retain a reference to the pool while avoiding
+/// reference cycles or prolonging its lifetime unnecessarily.
+///
+/// To access the pool, use [`WeakPool::upgrade`] to attempt to get a strong reference.
+#[derive(Debug)]
+pub struct WeakPool<M: Manager, W: From<Object<M>> = Object<M>> {
+    inner: Weak<PoolInner<M>>,
+    _wrapper: PhantomData<fn() -> W>,
+}
+
+impl<M: Manager, W: From<Object<M>>> WeakPool<M, W> {
+    /// Attempts to upgrade the `WeakPool` to a strong [`Pool<T>`] reference.
+    ///
+    /// If the pool has already been dropped (i.e., no strong references remain),
+    /// this returns `None`.
+    pub fn upgrade(&self) -> Option<Pool<M, W>> {
+        Some(Pool {
+            inner: self.inner.upgrade()?,
+            _wrapper: PhantomData,
+        })
     }
 }
 

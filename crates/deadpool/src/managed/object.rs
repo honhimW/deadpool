@@ -1,11 +1,9 @@
 use std::{
     fmt,
-    marker::PhantomData,
     ops::{Deref, DerefMut},
-    sync::Weak,
 };
 
-use crate::managed::{pool::PoolInner, Manager, Metrics, Pool};
+use crate::managed::{Manager, Metrics, Pool, WeakPool};
 
 /// Wrapper around the actual pooled object which implements [`Deref`],
 /// [`DerefMut`] and [`Drop`] traits.
@@ -18,7 +16,7 @@ pub struct Object<M: Manager> {
     pub(crate) inner: Option<ObjectInner<M>>,
 
     /// Pool to return the pooled object to.
-    pub(crate) pool: Weak<PoolInner<M>>,
+    pub(crate) pool: WeakPool<M>,
 }
 
 impl<M> fmt::Debug for Object<M>
@@ -78,13 +76,10 @@ impl<M: Manager> Object<M> {
 
     /// Returns the [`Pool`] this [`Object`] belongs to.
     ///
-    /// Since [`Object`]s only hold a [`Weak`] reference to the [`Pool`] they
-    /// come from, this can fail and return [`None`] instead.
+    /// Since [`Object`]s only hold a [`std::sync::Weak`] reference to the
+    /// [`Pool`] they come from, this can fail and return [`None`] instead.
     pub fn pool(this: &Self) -> Option<Pool<M>> {
-        this.pool.upgrade().map(|inner| Pool {
-            inner,
-            _wrapper: PhantomData,
-        })
+        this.pool.upgrade()
     }
 }
 
@@ -92,7 +87,7 @@ impl<M: Manager> Drop for Object<M> {
     fn drop(&mut self) {
         if let Some(inner) = self.inner.take() {
             if let Some(pool) = self.pool.upgrade() {
-                pool.return_object(inner)
+                pool.inner.return_object(inner)
             }
         }
     }

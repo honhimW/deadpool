@@ -69,5 +69,5 @@ pub use self::{
     manager::{Manager, RecycleResult},
     metrics::Metrics,
     object::Object,
-    pool::{Pool, RetainResult},
+    pool::{Pool, RetainResult, WeakPool},
 };
