@@ -2,7 +2,9 @@
 
 use std::{borrow::Cow, fmt, future::Future, pin::Pin};
 
-use super::{Manager, Metrics, ObjectInner};
+use crate::managed::object::ObjectInner;
+
+use super::{Manager, Metrics};
 
 /// The result returned by hooks
 pub type HookResult<E> = Result<(), HookError<E>>;
