@@ -216,9 +216,9 @@ async fn main() {
 
 ### Example with `config` and `dotenvy` crate
 ```rust
-use redis::cmd;
 use serde::{Deserialize, Serialize};
-use deadpool_redis::Runtime;
+use deadpool_redis::{redis, Runtime};
+use dotenvy::dotenv;
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 struct Config {
@@ -251,7 +251,7 @@ fn create_pool() -> deadpool_redis::sentinel::Pool {
         .unwrap()
 }
 
-#[tokio::test]
+#[tokio::main]
 async fn main() {
     dotenv().ok();
     use deadpool_redis::redis::pipe;
