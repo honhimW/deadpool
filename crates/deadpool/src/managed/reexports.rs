@@ -30,6 +30,9 @@ macro_rules! managed_reexports {
         #[doc=concat!("Type alias for using [`deadpool::managed::Pool`] with [`", $crate_name, "`].")]
         pub type Pool = deadpool::managed::Pool<$Manager, $Wrapper>;
 
+        #[doc=concat!("Type alias for using [`deadpool::managed::Pool`] with [`", $crate_name, "`].")]
+        pub type WeakPool = deadpool::managed::WeakPool<$Manager, $Wrapper>;
+
         #[doc=concat!("Type alias for using [`deadpool::managed::PoolBuilder`] with [`", $crate_name, "`].")]
         pub type PoolBuilder = deadpool::managed::PoolBuilder<$Manager, $Wrapper>;
 
