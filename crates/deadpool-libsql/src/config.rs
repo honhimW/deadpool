@@ -263,7 +263,6 @@ pub struct Remote {
 #[cfg(feature = "remote")]
 impl Remote {
     async fn libsql_database(&self) -> Result<libsql::Database, libsql::Error> {
-        // connector, namespace, remote_encryption
         let mut builder = Builder::new_remote(self.url.clone(), self.auth_token.clone());
         // TODO connector
         if let Some(namespace) = &self.namespace {
