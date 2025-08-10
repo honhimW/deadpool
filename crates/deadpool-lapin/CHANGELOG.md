@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Update `tokio-reactor-trait` to version `3`
+- Disable `tokio-reactor-trait` on Windows
 - Re-export `lapin` features:
     - `default-runtime`
     - `rustls--aws_lc_rs`
