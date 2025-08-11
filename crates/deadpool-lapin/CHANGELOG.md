@@ -85,7 +85,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - First release
 
 <!-- next-url -->
-[Unreleased]: https://github.com/bikeshedder/deadpool/compare/deadpool-lapin-v0.13.0...HEAD
+[Unreleased]: https://github.com/bikeshedder/deadpool/compare/deadpool-lapin-v0.13.1...HEAD
+[0.13.1]: https://github.com/bikeshedder/deadpool/compare/deadpool-lapin-v0.13.0...deadpool-lapin-v0.13.1
 [0.13.0]: https://github.com/bikeshedder/deadpool/compare/deadpool-lapin-v0.12.1...deadpool-lapin-v0.13.0
 [0.12.1]: https://github.com/bikeshedder/deadpool/compare/deadpool-lapin-v0.12.0...deadpool-lapin-v0.12.1
 [0.12.0]: https://github.com/bikeshedder/deadpool/compare/deadpool-lapin-v0.11.0...deadpool-lapin-v0.12.0
